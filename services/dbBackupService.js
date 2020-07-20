@@ -6,7 +6,7 @@ const rimraf = require("rimraf");
 
 class DBBackupService {
 
-  /* TODO: 
+  /* TODO:
   This has an issue when more than 6 calls are made at once.
   It looks like too many database connections at once.
 
@@ -20,10 +20,10 @@ class DBBackupService {
     const backupDir = `./databaseBackups`;
     const tempDir = `${backupDir}/dbTemp${randNum}`;
     // console.log(process.env.DB_DATABASE);
-    
+
 
     // Create temp dir if not existing
-    if (!fs.existsSync(tempDir)){
+    if (!fs.existsSync(tempDir)) {
       await fs.mkdirSync(tempDir);
     }
 
@@ -87,7 +87,7 @@ class DBBackupService {
       console.error(err);
       throw new Error(err);
     }
-    
+
   }
 
   static async startBackupCSV(ctx, tempDir) {
@@ -140,7 +140,7 @@ class DBBackupService {
       console.error(err);
       throw new Error(err);
     }
-    
+
   }
 
   static async getData(ctx, tableName) {
@@ -152,7 +152,7 @@ class DBBackupService {
       console.error(err);
       throw new Error(err);
     }
-    
+
   }
 
   static async csvBackup(data, tempDir, tableName) {
@@ -176,13 +176,13 @@ class DBBackupService {
 
     if (!fileName) fileName = "dumpDefault";
 
-    fs.writeFile(`${tempDir}/${fileName}.csv`, csvData, function(err) {
-      if(err) {
+    fs.writeFile(`${tempDir}/${fileName}.csv`, csvData, function (err) {
+      if (err) {
         return console.log(err);
       }
-  
+      return true;
       // console.log("csv file was saved!");
-    }); 
+    });
 
     return 'csv write done';
   }
@@ -209,8 +209,10 @@ class DBBackupService {
 
   static async deleteTempDir(tempDir) {
     // Delete temp files
-    setTimeout(()=>{
-      rimraf(`${tempDir}`, () => { console.log("deleted temp folder"); });
+    setTimeout(() => {
+      rimraf(`${tempDir}`, () => {
+        console.log("deleted temp folder");
+      });
     }, 100000);
   }
 

@@ -12,8 +12,7 @@ router.get('/user/getroles', sec.validAdmin, user.getRoles); // get all user rol
 
 router.delete('/user/:userId', sec.validAdmin, user.deleteUser); // delete a user
 
-router.put('/user/password', sec.validUser, user.updatePassword); // Update current user password.
-router.put('/user/:userId', sec.validUser, user.save); // update a user
+router.put('/user/:userId', sec.validUser, user.update); // update a user
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 module.exports = router.middleware();

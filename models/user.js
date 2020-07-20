@@ -10,6 +10,8 @@ const jwt = require('jsonwebtoken'); // JSON Web Token implementation
 const randomstring = require('randomstring');
 const utils = require('./util');
 
+const userService = require('../services/user');
+
 const MailComposer = require('nodemailer/lib/mail-composer');
 const retSvc = require('../services/return');
 const crypto = require('crypto');
@@ -84,11 +86,7 @@ class User {
 
   static async get(ctx) {
     const userId = ctx.state.user.id;
-    const [[user]] = await global.db.query(
-      `SELECT * FROM user WHERE id = :userId`, {
-        userId
-      }
-    );
+    const user = await userService.getUser(userId);
     delete user.password;
     delete user.passwordSalt;
     delete user.passwordHash;
@@ -97,77 +95,27 @@ class User {
   }
 
   static async getAllAdmin(ctx) {
-    const teamWhere = '';
-    if (ctx.state.user.role === 1) {
-      ctx.body = [];
-      return;
-    }
-    const [users] = await global.db.query(`SELECT *
-                                           FROM user
-                                           ORDER BY fname, lname`);
-
+    const users = await userService.getUsers();
     ctx.body = users;
   }
 
   static async getRoles(ctx) {
-    const [roles] = await global.db.query(
-      'Select * From userRole order by id asc;'
-    );
+    const roles = await userService.getRoles();
     ctx.body = retSvc.setReturn(roles);
   }
 
-  static async updatePassword(ctx) {
-    const user = ctx.state.user ? await User.get(ctx.state.user.id) : null;
-    if (ctx.request.body.password && ctx.request.body.password.length > 3) {
-
-      const newPasswordInfo = await utils.makePWHash(ctx.request.body.password);
-
-      const [res] = await global.db.query('update user set passwordHash = :passwordHash, passwordSalt = :passwordSalt, passwordIterations = :passwordIterations where id = :id', {
-        id: user.id,
-        passwordHash: newPasswordInfo.hash,
-        passwordSalt: newPasswordInfo.salt,
-        passwordIterations: newPasswordInfo.iterations,
-      });
-      ctx.body = res;
-    } else {
-      ctx.body = {
-        error: "password must be set."
-      };
-    }
-  }
-
-  static async save(ctx) {
+  static async update(ctx) {
     const requestBody = ctx.request.body;
     const resultArray = [];
 
     if (ctx.request.body.password && ctx.request.body.password.length > 3) {
       const newPasswordInfo = await utils.makePWHash(requestBody.password);
-
-      const resultPass = await global.db.query(
-        'update user set passwordHash = :passwordHash, passwordSalt = :passwordSalt, passwordIterations = :passwordIterations where id = :id', {
-          id: requestBody.id,
-          passwordHash: newPasswordInfo.hash,
-          passwordSalt: newPasswordInfo.salt,
-          passwordIterations: newPasswordInfo.iterations,
-        }
-      );
+      const resultPass = await userService.updatePassword(ctx.params.userId, newPasswordInfo.hash, newPasswordInfo.salt, newPasswordInfo.iterations);
       resultArray.push(resultPass);
     }
+
     if (requestBody.email && requestBody.fname && requestBody.lname && requestBody.status) {
-      const resultUpdate = await global.db.query(`update user
-                                            set email  = :email,
-                                                fname  = :fname,
-                                                lname  = :lname,
-                                                phone  = :phone,
-                                                status = :status
-                                            where id = :id`, {
-        id: ctx.params.userId,
-        email: requestBody.email,
-        fname: requestBody.fname,
-        lname: requestBody.lname,
-        phone: requestBody.phone,
-        status: requestBody.status,
-      });
+      const resultUpdate = await userService.updateUser(ctx.params.userId, requestBody.email, requestBody.fname, requestBody.lname, requestBody.phone, requestBody.status);
       resultArray.push(resultUpdate);
     }
 
@@ -175,9 +123,9 @@ class User {
   }
 
   static async deleteUser(ctx) {
-    const result = await global.db.query('update user set status = 0 where id = :id', {
-      id: ctx.params.userId,
-    });
+
+    const result = userService.delete(ctx.params.userId);
+
     ctx.body = result;
   }
 
@@ -229,14 +177,10 @@ class User {
   }
 
   static async register(ctx) {
-
-    if (!ctx.request.body.password && !ctx.request.body.email) {
-      ctx.request.body = JSON.parse(ctx.request.body);
-    }
-
     let result = [];
 
     try {
+      console.log('in');
       const newPasswordInfo = await utils.makePWHash(ctx.request.body.password);
       result = await global.db.query(
         `insert into user (fname, lname, email, phone, passwordHash, passwordSalt, passwordIterations, status) 
