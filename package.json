@@ -46,7 +46,6 @@
     "nodemailer": "^4.6.8",
     "randomstring": "^1.1.5",
     "rimraf": "^2.6.3",
-    "scrypt": "^6.0.3",
     "xlsx": "^0.13.5"
   },
   "devDependencies": {
@@ -55,7 +54,7 @@
     "eslint": "^3.16.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.5",
-    "npm-check": "^5.9.0",
+    "npm-check": "^5.9.2",
     "supertest": "^3.3.0"
   },
   "eslintConfig": {
