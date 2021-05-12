@@ -45,7 +45,7 @@
     "mysql2": "^1.7.0",
     "mysqldump": "^2.3.0",
     "mz": "^2.7.0",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^6.4.16",
     "nwmatcher": ">=1.4.4",
     "randomstring": "^1.1.5",
     "rimraf": "^2.7.1",
