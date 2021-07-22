@@ -49,7 +49,7 @@
     "nwmatcher": ">=1.4.4",
     "randomstring": "^1.1.5",
     "rimraf": "^2.7.1",
-    "xlsx": "^0.13.5"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "apidoc": "^0.17.7",
