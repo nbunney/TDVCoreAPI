@@ -39,7 +39,7 @@
     "koa2-cors": "^2.0.6",
     "luxon": "^1.24.1",
     "mailgun-js": "^0.20.0",
-    "markdown-it": "^8.4.2",
+    "markdown-it": "^12.3.2",
     "minimist": ">=0.2.1",
     "moment": "^2.27.0",
     "mysql2": "^1.7.0",
