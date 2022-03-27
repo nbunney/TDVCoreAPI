@@ -40,7 +40,7 @@
     "luxon": "^1.24.1",
     "mailgun-js": "^0.20.0",
     "markdown-it": "^8.4.2",
-    "minimist": ">=0.2.1",
+    "minimist": ">=1.2.6",
     "moment": "^2.27.0",
     "mysql2": "^1.7.0",
     "mysqldump": "^2.3.0",
