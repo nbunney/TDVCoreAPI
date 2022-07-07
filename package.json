@@ -41,7 +41,7 @@
     "mailgun-js": "^0.20.0",
     "markdown-it": "^8.4.2",
     "minimist": ">=0.2.1",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "mysql2": "^1.7.0",
     "mysqldump": "^2.3.0",
     "mz": "^2.7.0",
