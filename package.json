@@ -37,7 +37,7 @@
     "koa-lusca": "^2.2.0",
     "koa-router": "^7.4.0",
     "koa2-cors": "^2.0.6",
-    "luxon": "^1.24.1",
+    "luxon": "^1.28.1",
     "mailgun-js": "^0.20.0",
     "markdown-it": "^8.4.2",
     "minimist": ">=0.2.1",
